@@ -1,0 +1,42 @@
+{
+  "project": "flashpaper",
+  "deployable_type": "ecs",
+  "instance_protocol": "https",
+  "instance_port": 8443,
+  "environment_sizes": {
+    "Sandbox": {
+      "desired_instances": 1
+    },
+    "Admin": {
+      "desired_instances": 1
+    }
+  },
+  "task_definition": {
+    "container_definitions": [
+      {
+        "name": "flashpaper",
+        "image": "dwolla/go-flashpaper",
+        "cpu": 128,
+        "memory": 128,
+        "port_mappings": [
+          {
+            "name": "https",
+            "container_port": 8443,
+            "load_balanced": true
+          }
+        ],
+        "essential": true
+      }
+    ]
+  },
+  "elb": {
+    "internet_facing": false,
+    "ssl_enabled": true,
+    "dns_service_name": "flashpaper",
+    "access_logs": true,
+    "health_check_grace_period": 10,
+    "health_check": {
+      "instance_path_to_health_check": "/"
+    }
+  }
+}
